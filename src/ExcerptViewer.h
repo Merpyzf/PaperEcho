@@ -349,6 +349,18 @@ private:
     }
 
     void _shutdownForNextPage(bool wrapAtEnd) {
+        unsigned long settleStartMs = millis();
+        READING_DIAG("SETTLE start before shutdown");
+        m5epd_err_t settleRet = M5.EPD.CheckAFSR();
+        unsigned long settleElapsedMs = millis() - settleStartMs;
+        if (settleRet != M5EPD_OK) {
+            READING_DIAG("SETTLE timeout ret=%d elapsed=%lums -> skip shutdown",
+                         (int)settleRet, settleElapsedMs);
+            _store.clearReadingState();
+            return;
+        }
+        READING_DIAG("SETTLE done elapsed=%lums", settleElapsedMs);
+
         int nextIndex = _currentIndex;
         int nextSubPage = _subPage;
         _computeNextPosition(wrapAtEnd, nextIndex, nextSubPage);
@@ -358,10 +370,13 @@ private:
             return;
         }
         uint32_t intervalSec = (uint32_t)_store.getAutoSwitchMinutes() * 60UL;
+        READING_DIAG("SHUTDOWN arm nextIndex=%d nextSubPage=%d intervalSec=%lu",
+                     nextIndex, nextSubPage, (unsigned long)intervalSec);
 
         M5.shutdown(intervalSec);
         // Returned from shutdown means power-off did not happen (e.g. USB powered).
         // Clear stale state to avoid false "RTC wake" fast-path on next cold boot.
+        READING_DIAG("SHUTDOWN returned, clear saved state");
         _store.clearReadingState();
     }
 
