@@ -37,7 +37,7 @@ public:
                 setCpuFrequencyMhz(80);
                 _fixSerial();
                 _ensureWifiStaMode();
-                WiFi.setSleep(true);
+                WiFi.setSleep(false);
                 break;
 
             case PROFILE_HOME_SYNCING:
