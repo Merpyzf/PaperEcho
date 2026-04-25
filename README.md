@@ -136,7 +136,8 @@ curl -X POST http://{IP}/api/sync \
         "bookId": 1,
         "content": "所有的大人都曾经是小孩，虽然，只有少数的人记得。",
         "idea": "写在扉页上的话",
-        "chapter": "作者献辞"
+        "chapter": "作者献辞",
+        "createdTime": 1713950000000
       }
     ],
     "reviewSettings": {
@@ -161,10 +162,13 @@ curl -X POST http://{IP}/api/sync \
 | `excerpts[].content` | string | 是 | 书摘正文（纯文本，不含 HTML） |
 | `excerpts[].idea` | string | 否 | 个人想法/批注，默认空字符串 |
 | `excerpts[].chapter` | string | 否 | 章节名（最长 63 字符） |
+| `excerpts[].createdTime` | long | 否 | 书摘创建时间，Unix epoch milliseconds；无有效时间时可为 `0` |
 | `reviewSettings` | object | 否 | 回顾设置 |
 | `reviewSettings.sortRule` | int | 否 | 排序方式：`0` 顺序，`1` 随机（默认 `1`） |
 | `reviewSettings.sortOrder` | int | 否 | 排序方向：`0` 从旧到新，`1` 从新到旧（默认 `0`） |
 | `reviewSettings.autoSwitchMinutes` | int | 否 | 自动切换间隔，单位分钟，范围 1-1440（默认 `10`） |
+
+`createdTime` 是为需要读取原始书摘创建时间的接收端预留的兼容字段。当前固件会将该字段原样保存到 SD 卡数据文件中，但不会在界面展示，也不会参与排序或筛选。
 
 **成功响应** — `200 OK`
 
@@ -235,14 +239,16 @@ curl -X POST http://{IP}/api/sync/batch \
         "bookId": 1,
         "content": "所有的大人都曾经是小孩，虽然，只有少数的人记得。",
         "idea": "",
-        "chapter": "作者献辞"
+        "chapter": "作者献辞",
+        "createdTime": 1713950000000
       },
       {
         "id": 201,
         "bookId": 2,
         "content": "追逐梦想就是追逐自己的厄运，在满地都是六便士的街上，他抬起头看到了月光。",
         "idea": "全书的主题",
-        "chapter": ""
+        "chapter": "",
+        "createdTime": 1713960000000
       }
     ]
   }'

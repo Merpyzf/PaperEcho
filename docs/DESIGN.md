@@ -171,7 +171,8 @@ M5Paper 作为 HTTP Server（端口 80），仅接受局域网请求。
       "bookId": 123,
       "content": "每个人都有属于自己的一片森林...",
       "idea": "这段话让我想到了故乡的山林",
-      "chapter": "第三章"
+      "chapter": "第三章",
+      "createdTime": 1713950000000
     }
   ]
 }
@@ -198,6 +199,7 @@ M5Paper 作为 HTTP Server（端口 80），仅接受局域网请求。
 - `excerpts[].content` — 书摘正文（必填）
 - `excerpts[].idea` — 个人感想（可选，可为空字符串）
 - `excerpts[].chapter` — 章节名（可选）
+- `excerpts[].createdTime` — 书摘创建时间（可选，Unix epoch milliseconds；当前固件保存但不展示）
 
 ### 2.3 同步策略
 
@@ -354,8 +356,8 @@ curl -X POST http://<IP>/api/sync \
   -d '{
     "books": [{"id":1,"name":"挪威的森林","author":"村上春树"}],
     "excerpts": [
-      {"id":1,"bookId":1,"content":"每个人都有属于自己的一片森林，也许我们从来不曾去过，但它一直在那里，总会在那里。","idea":"","chapter":""},
-      {"id":2,"bookId":1,"content":"死并非生的对立面，而作为生的一部分永存。","idea":"生死观","chapter":"第四章"}
+      {"id":1,"bookId":1,"content":"每个人都有属于自己的一片森林，也许我们从来不曾去过，但它一直在那里，总会在那里。","idea":"","chapter":"","createdTime":1713950000000},
+      {"id":2,"bookId":1,"content":"死并非生的对立面，而作为生的一部分永存。","idea":"生死观","chapter":"第四章","createdTime":1713960000000}
     ]
   }'
 
